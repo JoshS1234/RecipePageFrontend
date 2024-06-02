@@ -1,5 +1,8 @@
 import { useEffect, useState } from "preact/hooks";
 import { Recipe } from "./types/Recipes";
+import RecipeCardContainer from "./Components/RecipeCardContainer";
+import NavBar from "./Components/NavBar";
+import Header from "./Components/Header";
 
 export function App() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -21,7 +24,7 @@ export function App() {
     setIsLoading(true);
     getRecipes()
       .then((data) => {
-        console.log(data);
+        setRecipes(data);
       })
       .then(() => {
         setIsLoading(false);
@@ -31,5 +34,17 @@ export function App() {
       });
   }, []);
 
-  return <div></div>;
+  return (
+    <div>
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <div>
+          <Header />
+          <NavBar />
+          <RecipeCardContainer recipes={recipes} />
+        </div>
+      )}
+    </div>
+  );
 }
