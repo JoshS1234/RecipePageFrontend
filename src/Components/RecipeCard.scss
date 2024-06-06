@@ -1,4 +1,43 @@
 .recipe-card {
   background-color: yellow;
   width: 80%;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin: 10px auto;
+  padding: 20px;
+
+  &__navigation-button-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  &__ratings-container {
+    width: 100%;
+
+    .recipe-card__button-container {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+
+  &__image {
+    width: 60%;
+    max-width: 60%;
+    height: 40%;
+    max-height: 600px;
+    margin: 0px auto;
+  }
+
+  &__ingredients-container {
+    width: 90%;
+  }
+
+  &__recipe-container {
+    width: 90%;
+  }
 }

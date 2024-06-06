@@ -7,7 +7,7 @@ type RecipeCardContainerProps = {
 
 const BrowseRecipes = ({ recipes }: RecipeCardContainerProps) => {
   return (
-    <div>
+    <div className="browse-recipes-page">
       <h1>Recipe Card Container</h1>
       <h2>Add filtering here</h2>
       <RecipeCardContainer recipes={recipes} />

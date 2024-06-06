@@ -1,5 +1,6 @@
 import { Recipe } from "../types/Recipes";
 import RecipeCard from "./RecipeCard";
+import "./RecipeCardContainer.scss";
 
 type RecipeCardContainerProps = {
   recipes: Recipe[];
@@ -7,9 +8,8 @@ type RecipeCardContainerProps = {
 
 const RecipeCardContainer = ({ recipes }: RecipeCardContainerProps) => {
   return (
-    <div>
+    <div className="recipe-card-container">
       {recipes.map((recipe) => {
-        console.log(recipe.author);
         return <RecipeCard recipe={recipe} />;
       })}
     </div>

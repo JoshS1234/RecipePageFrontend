@@ -1,6 +1,5 @@
 import { useEffect, useState } from "preact/hooks";
 import { Recipe } from "./types/Recipes";
-import RecipeCardContainer from "./Components/RecipeCardContainer";
 import NavBar from "./Components/NavBar";
 import Header from "./Components/Header";
 import { HashRouter, Route, Routes } from "react-router-dom";
@@ -10,6 +9,7 @@ import SpecificRecipePage from "./Components/SpecificRecipePage";
 import AddRecipe from "./Components/AddRecipe";
 import TopRatedRecipes from "./Components/TopRatedRecipes";
 import PageNotFound from "./Components/PageNotFound";
+import "./app.scss";
 
 export function App() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
