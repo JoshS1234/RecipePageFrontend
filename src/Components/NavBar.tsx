@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 const NavBar = () => {
   return (
     <div>
-      <Link to="/recipes">Browse recipes</Link>
       <Link to="/">Home</Link>
       <Link to="/recipe/1">Recipe1</Link>
       <Link to="/add-recipe">Add a new recipe</Link>

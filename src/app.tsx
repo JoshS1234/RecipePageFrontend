@@ -51,11 +51,8 @@ export function App() {
             <Header />
             <NavBar />
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route
-                path="/recipes"
-                element={<BrowseRecipes recipes={recipes} />}
-              />
+              <Route path="/" element={<BrowseRecipes recipes={recipes} />} />
+
               <Route path="/recipe/:id" element={<SpecificRecipePage />} />
               <Route path="/add-recipe" element={<AddRecipe />} />
               <Route path="/recipes/top-rated" element={<TopRatedRecipes />} />
