@@ -2,7 +2,11 @@ import React, { unstable_LowPriority, useEffect, useState } from "react";
 import "./AddRecipe.scss";
 import { Ingredient } from "../types/Recipes";
 
-const AddRecipe = () => {
+type AddRecipeProps = {
+  handleDatabaseUpdate: () => void;
+};
+
+const AddRecipe = ({ handleDatabaseUpdate }: AddRecipeProps) => {
   useEffect(() => {});
 
   const [hasError, setHasError] = useState<boolean>(false);
@@ -204,6 +208,8 @@ const AddRecipe = () => {
         body: JSON.stringify(newRecipe),
       });
     }
+
+    handleDatabaseUpdate();
   };
 
   return (

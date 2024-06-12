@@ -14,6 +14,11 @@ import "./app.scss";
 export function App() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [hasUpdatedDB, setHasUpdatedDB] = useState<boolean>(false);
+
+  const handleDatabaseUpdate = () => {
+    setHasUpdatedDB(!hasUpdatedDB);
+  };
 
   const getRecipes = async () => {
     let totalArr: Recipe[] = [];
@@ -39,7 +44,7 @@ export function App() {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [handleDatabaseUpdate]);
 
   return (
     <HashRouter>
@@ -52,9 +57,13 @@ export function App() {
             <NavBar />
             <Routes>
               <Route path="/" element={<BrowseRecipes recipes={recipes} />} />
-
               <Route path="/recipe/:id" element={<SpecificRecipePage />} />
-              <Route path="/add-recipe" element={<AddRecipe />} />
+              <Route
+                path="/add-recipe"
+                element={
+                  <AddRecipe handleDatabaseUpdate={handleDatabaseUpdate} />
+                }
+              />
               <Route path="/recipes/top-rated" element={<TopRatedRecipes />} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
