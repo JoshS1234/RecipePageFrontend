@@ -1,4 +1,4 @@
-import React, { unstable_LowPriority, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./AddRecipe.scss";
 import { Ingredient } from "../types/Recipes";
 
@@ -7,8 +7,7 @@ type AddRecipeProps = {
 };
 
 const AddRecipe = ({ handleDatabaseUpdate }: AddRecipeProps) => {
-  useEffect(() => {});
-
+  const [hasCompletedForm, setHasCompletedForm] = useState<boolean>(false);
   const [hasError, setHasError] = useState<boolean>(false);
 
   const [ingredients, setIngredients] = useState<Ingredient[]>([
@@ -17,23 +16,22 @@ const AddRecipe = ({ handleDatabaseUpdate }: AddRecipeProps) => {
 
   const [recipeSteps, setRecipeSteps] = useState<string[]>([""]);
 
+  const cancelFormSubmissionMessage = () => {
+    setHasCompletedForm(false);
+  };
+
+  const resetVariables = () => {
+    setIngredients([{ name: "", amount: "" }]);
+    setRecipeSteps([""]);
+  };
+
   const handleRemoveIngredients = (e: MouseEvent) => {
     let target = e.target as EventTarget;
     let id = target.id;
     let index = id.match(/\d+$/)[0];
-    console.log(ingredients);
 
     if (ingredients.length > 1) {
       const removedIngredientArr = ingredients.filter((element, i) => {
-        console.log(
-          "index pressed: ",
-          index,
-          " this index: ",
-          i,
-          " same: ",
-          i != index
-        );
-
         return i != index;
       });
       setIngredients(removedIngredientArr);
@@ -43,33 +41,28 @@ const AddRecipe = ({ handleDatabaseUpdate }: AddRecipeProps) => {
   };
 
   const handleRenameIngredients = (e: Event) => {
+    cancelFormSubmissionMessage();
     let target = e.target as EventTarget;
     let id = target.id;
     let index = id.match(/\d+$/)[0];
-
-    console.log(ingredients);
 
     let ingredientsCopy = [...ingredients];
     ingredientsCopy[index].name = e.target.value;
     setIngredients(ingredientsCopy);
-    console.log(ingredients);
   };
 
   const handleChangeIngredientAmount = (e) => {
+    cancelFormSubmissionMessage();
+
     let target = e.target as EventTarget;
     let id = target.id;
     let index = id.match(/\d+$/)[0];
 
-    console.log(ingredients);
-
     let ingredientsCopy = [...ingredients];
     ingredientsCopy[index].amount = e.target.value;
     setIngredients(ingredientsCopy);
-    console.log(ingredients);
   };
   const handleAddIngredients = (e) => {
-    console.log(e.target);
-
     if (ingredients.length < 12) {
       setIngredients([...ingredients, { name: "", amount: "" }]);
     } else {
@@ -78,6 +71,8 @@ const AddRecipe = ({ handleDatabaseUpdate }: AddRecipeProps) => {
   };
 
   const handleChangeRecipeStep = (e: Event) => {
+    cancelFormSubmissionMessage();
+
     let target = e.target as EventTarget;
     let id = target.id;
     let index = id.match(/\d+$/)[0];
@@ -85,30 +80,17 @@ const AddRecipe = ({ handleDatabaseUpdate }: AddRecipeProps) => {
     let recipeStepCopy = [...recipeSteps];
     recipeStepCopy[index] = e.target.value;
     setRecipeSteps(recipeStepCopy);
-    console.log(recipeSteps);
   };
 
   const handleRemoveRecipeSteps = (e: Event) => {
     let target = e.target as EventTarget;
     let id = target.id;
     let index = id.match(/\d+$/)[0];
-    console.log(index);
 
     if (recipeSteps.length > 1) {
       const removedRecipeStepsArr = recipeSteps.filter((element, i) => {
-        console.log(
-          "index pressed: ",
-          index,
-          " this index: ",
-          i,
-          " same: ",
-          i != index
-        );
-
         return i != index;
       });
-
-      console.log(removedRecipeStepsArr);
 
       setRecipeSteps(removedRecipeStepsArr);
     } else {
@@ -117,6 +99,8 @@ const AddRecipe = ({ handleDatabaseUpdate }: AddRecipeProps) => {
   };
 
   const handleAddRecipeSteps = () => {
+    cancelFormSubmissionMessage();
+
     if (recipeSteps.length < 12) {
       setRecipeSteps([...recipeSteps, ""]);
     } else {
@@ -137,49 +121,20 @@ const AddRecipe = ({ handleDatabaseUpdate }: AddRecipeProps) => {
     const recipeAuthor = target[1].value;
     const recipeImage_url = target[2].value;
     if (!recipeTitle || !recipeAuthor || !recipeImage_url) {
-      console.log("primitive issue");
       setHasError(true);
     }
-    console.log(hasError);
 
     for (let i = 0; i < ingredientCount; i++) {
-      // if (target[3 + 4 * i].value != "" && target[3 + 4 * i + 1].value != "") {
-      //   console.log(target[3 + 4 * i].value);
-      //   console.log(target[3 + 4 * i + 1].value);
-
-      //   const ingredient = {
-      //     name: target[3 + 4 * i].value,
-      //     amount: target[3 + 4 * i + 1].value,
-      //   };
-      //   recipeIngredients.push(ingredient);
-      //   console.log(recipeIngredients);
-      // } else {
-      //   console.log("Cannot leave ingredients blank");
-      //   setHasError(true);
-      // }
       if (ingredients[i].name == "" || ingredients[i].amount == "") {
-        console.log("Cannot leave any ingredient parts blank");
-
         setHasError(true);
       }
     }
-    // setIngredients(recipeIngredients);
-    console.log(hasError);
 
     for (let i = 0; i < recipeStepCount; i++) {
-      // if (target[3 + 4 * ingredientCount + 3 * i].value != "") {
-      //   recipeRecipe_steps.push(target[3 + 4 * ingredientCount + 3 * i].value);
-      // } else {
-      //   console.log("Recipe steps cannot be blank");
-      //   setHasError(true);
-      // }
       if (recipeSteps[i] == "") {
-        console.log("Recipe steps cannot be blank");
         setHasError(true);
       }
     }
-    // setRecipeSteps(recipeRecipe_steps);
-    console.log(hasError);
 
     const date = new Date();
     const current_date =
@@ -194,22 +149,20 @@ const AddRecipe = ({ handleDatabaseUpdate }: AddRecipeProps) => {
       recipe_steps: recipeSteps,
     };
 
-    console.log(hasError);
-
     if (hasError) {
-      console.log(newRecipe);
-
       alert("there are blank fields");
     } else {
-      console.log(JSON.stringify(newRecipe));
       fetch(`http://localhost:8080/recipes`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newRecipe),
       });
-    }
+      target.reset();
 
-    handleDatabaseUpdate();
+      resetVariables();
+
+      setHasCompletedForm(true);
+    }
   };
 
   return (
@@ -218,17 +171,17 @@ const AddRecipe = ({ handleDatabaseUpdate }: AddRecipeProps) => {
       <form className="add-recipe-page__form" onSubmit={handleSubmit}>
         <div className="add-recipe-page__simple-input">
           <label>Recipe name</label>
-          <input type="text"></input>
+          <input type="text" onChange={cancelFormSubmissionMessage}></input>
         </div>
 
         <div className="add-recipe-page__simple-input">
           <label>Author</label>
-          <input type="text"></input>
+          <input type="text" onChange={cancelFormSubmissionMessage}></input>
         </div>
 
         <div className="add-recipe-page__simple-input">
           <label>Image url</label>
-          <input type="text"></input>
+          <input type="text" onChange={cancelFormSubmissionMessage}></input>
         </div>
 
         {ingredients.map((ingredient, index) => {
@@ -292,6 +245,8 @@ const AddRecipe = ({ handleDatabaseUpdate }: AddRecipeProps) => {
         })}
 
         {hasError ? <p>You need to fill out all inputs</p> : <></>}
+        {hasCompletedForm ? <p>Recipe has been submitted</p> : <></>}
+
         <button type="submit">Submit</button>
       </form>
     </div>

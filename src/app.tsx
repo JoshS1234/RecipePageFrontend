@@ -4,7 +4,6 @@ import NavBar from "./Components/NavBar";
 import Header from "./Components/Header";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import BrowseRecipes from "./Components/BrowseRecipes";
-import Home from "./Components/Home";
 import SpecificRecipePage from "./Components/SpecificRecipePage";
 import AddRecipe from "./Components/AddRecipe";
 import TopRatedRecipes from "./Components/TopRatedRecipes";
@@ -44,7 +43,7 @@ export function App() {
       .catch((err) => {
         console.log(err);
       });
-  }, [handleDatabaseUpdate]);
+  }, [hasUpdatedDB]);
 
   return (
     <HashRouter>
@@ -54,7 +53,7 @@ export function App() {
         ) : (
           <div>
             <Header />
-            <NavBar />
+            <NavBar handleDatabaseUpdate={handleDatabaseUpdate} />
             <Routes>
               <Route path="/" element={<BrowseRecipes recipes={recipes} />} />
               <Route path="/recipe/:id" element={<SpecificRecipePage />} />
