@@ -20,9 +20,18 @@ const AddRecipe = () => {
     console.log(ingredients);
 
     if (ingredients.length > 1) {
-      const removedIngredientArr = ingredients
-        .slice(0, index)
-        .concat(ingredients.slice(index + 1));
+      const removedIngredientArr = ingredients.filter((element, i) => {
+        console.log(
+          "index pressed: ",
+          index,
+          " this index: ",
+          i,
+          " same: ",
+          i != index
+        );
+
+        return i != index;
+      });
       setIngredients(removedIngredientArr);
     } else {
       alert("Need at least 1 ingredient");
@@ -129,7 +138,6 @@ const AddRecipe = () => {
     }
     console.log(hasError);
 
-    const recipeIngredients = [];
     for (let i = 0; i < ingredientCount; i++) {
       // if (target[3 + 4 * i].value != "" && target[3 + 4 * i + 1].value != "") {
       //   console.log(target[3 + 4 * i].value);
@@ -225,6 +233,7 @@ const AddRecipe = () => {
                 type="text"
                 onChange={handleRenameIngredients}
                 id={`ing-textbox-${index}`}
+                value={ingredient.name}
               ></input>
 
               <label>Amount</label>
@@ -232,6 +241,7 @@ const AddRecipe = () => {
                 type="text"
                 onChange={handleChangeIngredientAmount}
                 id={`ing-amount-textbox-${index}`}
+                value={ingredient.amount}
               ></input>
 
               <button onClick={handleAddIngredients} type="button">
@@ -256,6 +266,7 @@ const AddRecipe = () => {
                 type="text"
                 onChange={handleChangeRecipeStep}
                 id={`rec-textbox-${index}`}
+                value={recipeStep}
               ></input>
 
               <div>
