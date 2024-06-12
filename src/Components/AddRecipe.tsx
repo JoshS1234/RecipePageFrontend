@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { unstable_LowPriority, useEffect, useState } from "react";
 import "./AddRecipe.scss";
 import { Ingredient } from "../types/Recipes";
 
@@ -13,7 +13,12 @@ const AddRecipe = () => {
 
   const [recipeSteps, setRecipeSteps] = useState<string[]>([""]);
 
-  const handleRemoveIngredients = (index: number) => {
+  const handleRemoveIngredients = (e: MouseEvent) => {
+    let target = e.target as EventTarget;
+    let id = target.id;
+    let index = id.match(/\d+$/)[0];
+    console.log(ingredients);
+
     if (ingredients.length > 1) {
       const removedIngredientArr = ingredients
         .slice(0, index)
@@ -24,7 +29,34 @@ const AddRecipe = () => {
     }
   };
 
-  const handleAddIngredients = () => {
+  const handleRenameIngredients = (e: Event) => {
+    let target = e.target as EventTarget;
+    let id = target.id;
+    let index = id.match(/\d+$/)[0];
+
+    console.log(ingredients);
+
+    let ingredientsCopy = [...ingredients];
+    ingredientsCopy[index].name = e.target.value;
+    setIngredients(ingredientsCopy);
+    console.log(ingredients);
+  };
+
+  const handleChangeIngredientAmount = (e) => {
+    let target = e.target as EventTarget;
+    let id = target.id;
+    let index = id.match(/\d+$/)[0];
+
+    console.log(ingredients);
+
+    let ingredientsCopy = [...ingredients];
+    ingredientsCopy[index].amount = e.target.value;
+    setIngredients(ingredientsCopy);
+    console.log(ingredients);
+  };
+  const handleAddIngredients = (e) => {
+    console.log(e.target);
+
     if (ingredients.length < 12) {
       setIngredients([...ingredients, { name: "", amount: "" }]);
     } else {
@@ -32,11 +64,39 @@ const AddRecipe = () => {
     }
   };
 
-  const handleRemoveRecipeSteps = (index: number) => {
+  const handleChangeRecipeStep = (e: Event) => {
+    let target = e.target as EventTarget;
+    let id = target.id;
+    let index = id.match(/\d+$/)[0];
+
+    let recipeStepCopy = [...recipeSteps];
+    recipeStepCopy[index] = e.target.value;
+    setRecipeSteps(recipeStepCopy);
+    console.log(recipeSteps);
+  };
+
+  const handleRemoveRecipeSteps = (e: Event) => {
+    let target = e.target as EventTarget;
+    let id = target.id;
+    let index = id.match(/\d+$/)[0];
+    console.log(index);
+
     if (recipeSteps.length > 1) {
-      const removedRecipeStepsArr = recipeSteps
-        .slice(0, index)
-        .concat(recipeSteps.slice(index + 1));
+      const removedRecipeStepsArr = recipeSteps.filter((element, i) => {
+        console.log(
+          "index pressed: ",
+          index,
+          " this index: ",
+          i,
+          " same: ",
+          i != index
+        );
+
+        return i != index;
+      });
+
+      console.log(removedRecipeStepsArr);
+
       setRecipeSteps(removedRecipeStepsArr);
     } else {
       alert("Need at least 1 recipe step");
@@ -60,7 +120,6 @@ const AddRecipe = () => {
     const target = e.target;
 
     //checks for null
-    console.log("hello");
     const recipeTitle = target[0].value;
     const recipeAuthor = target[1].value;
     const recipeImage_url = target[2].value;
@@ -72,36 +131,42 @@ const AddRecipe = () => {
 
     const recipeIngredients = [];
     for (let i = 0; i < ingredientCount; i++) {
-      if (target[3 + 4 * i].value != "" && target[3 + 4 * i + 1].value != "") {
-        console.log(target[3 + 4 * i].value);
-        console.log(target[3 + 4 * i + 1].value);
+      // if (target[3 + 4 * i].value != "" && target[3 + 4 * i + 1].value != "") {
+      //   console.log(target[3 + 4 * i].value);
+      //   console.log(target[3 + 4 * i + 1].value);
 
-        const ingredient = {
-          name: target[3 + 4 * i].value,
-          amount: target[3 + 4 * i + 1].value,
-        };
-        recipeIngredients.push(ingredient);
-        console.log(recipeIngredients);
-      } else {
-        console.log("Cannot leave ingredients blank");
+      //   const ingredient = {
+      //     name: target[3 + 4 * i].value,
+      //     amount: target[3 + 4 * i + 1].value,
+      //   };
+      //   recipeIngredients.push(ingredient);
+      //   console.log(recipeIngredients);
+      // } else {
+      //   console.log("Cannot leave ingredients blank");
+      //   setHasError(true);
+      // }
+      if (ingredients[i].name == "" || ingredients[i].amount == "") {
+        console.log("Cannot leave any ingredient parts blank");
+
         setHasError(true);
       }
     }
-    setIngredients(recipeIngredients);
+    // setIngredients(recipeIngredients);
     console.log(hasError);
 
-    const recipeRecipe_steps = [];
-    console.log(recipeStepCount);
-
     for (let i = 0; i < recipeStepCount; i++) {
-      if (target[3 + 4 * ingredientCount + 3 * i].value != "") {
-        recipeRecipe_steps.push(target[3 + 4 * ingredientCount + 3 * i].value);
-      } else {
+      // if (target[3 + 4 * ingredientCount + 3 * i].value != "") {
+      //   recipeRecipe_steps.push(target[3 + 4 * ingredientCount + 3 * i].value);
+      // } else {
+      //   console.log("Recipe steps cannot be blank");
+      //   setHasError(true);
+      // }
+      if (recipeSteps[i] == "") {
         console.log("Recipe steps cannot be blank");
         setHasError(true);
       }
     }
-    setRecipeSteps(recipeRecipe_steps);
+    // setRecipeSteps(recipeRecipe_steps);
     console.log(hasError);
 
     const date = new Date();
@@ -114,9 +179,8 @@ const AddRecipe = () => {
       image_url: recipeImage_url,
       date_created: current_date,
       ingredients: ingredients,
-      recipe_steps: recipeRecipe_steps,
+      recipe_steps: recipeSteps,
     };
-    const recipeBody = JSON.stringify(newRecipe);
 
     console.log(hasError);
 
@@ -157,17 +221,26 @@ const AddRecipe = () => {
           return (
             <div className="add-recipe-page__ingredient-container">
               <label>Ingredient {index + 1}</label>
-              <input type="text"></input>
+              <input
+                type="text"
+                onChange={handleRenameIngredients}
+                id={`ing-textbox-${index}`}
+              ></input>
 
               <label>Amount</label>
-              <input type="text"></input>
+              <input
+                type="text"
+                onChange={handleChangeIngredientAmount}
+                id={`ing-amount-textbox-${index}`}
+              ></input>
 
               <button onClick={handleAddIngredients} type="button">
                 Add ingredients
               </button>
               <button
-                onClick={(index) => handleRemoveIngredients(index)}
+                onClick={handleRemoveIngredients}
                 type="button"
+                id={`remove-ing-button-${index}`}
               >
                 remove
               </button>
@@ -179,15 +252,20 @@ const AddRecipe = () => {
           return (
             <div className="add-recipe-page__recipe-step-container">
               <label>Recipe step {index + 1}</label>
-              <input type="text"></input>
+              <input
+                type="text"
+                onChange={handleChangeRecipeStep}
+                id={`rec-textbox-${index}`}
+              ></input>
 
               <div>
                 <button onClick={handleAddRecipeSteps} type="button">
                   Add recipe steps
                 </button>
                 <button
-                  onClick={(index) => handleRemoveRecipeSteps(index)}
+                  onClick={handleRemoveRecipeSteps}
                   type="button"
+                  id={`remove-rec-button-${index}`}
                 >
                   remove
                 </button>
