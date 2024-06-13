@@ -63,7 +63,10 @@ export function App() {
                   <AddRecipe handleDatabaseUpdate={handleDatabaseUpdate} />
                 }
               />
-              <Route path="/recipes/top-rated" element={<TopRatedRecipes />} />
+              <Route
+                path="/recipes/top-rated"
+                element={<TopRatedRecipes recipes={recipes} />}
+              />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </div>
