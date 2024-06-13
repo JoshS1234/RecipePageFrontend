@@ -52,9 +52,24 @@
           width: 100%;
         }
       }
+    }
 
-      input {
-        width: 80%;
+    .form-end-button-container {
+      margin: 10px 0px 10px 0px;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+
+      button {
+        width: 45%;
+        height: 3rem;
+        font-size: 1rem;
+
+        a {
+          text-decoration: none;
+          color: black;
+        }
       }
     }
   }

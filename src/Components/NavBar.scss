@@ -1,0 +1,26 @@
+@use "../assets//variables" as *;
+
+.navbar {
+  background-color: $almond;
+  height: 5vh;
+  max-height: 5vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+
+  &__link {
+    text-decoration: none;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    justify-content: space-around;
+    display: flex;
+    font-size: 1.5rem;
+
+    &:hover {
+      background-color: darken($almond, 10%);
+      transition: all 0.25s ease-in-out;
+    }
+  }
+}

@@ -39,26 +39,36 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
 
   return isFront ? (
     <div className="recipe-card">
-      <div className="recipe-card__navigation-button-container">
-        <button>
-          <Link to={`/recipe/${recipeToDisplay.id}`}>Edit recipe</Link>
+      <div className="recipe-card__navigation-container">
+        <button className="recipe-card__navigation-container-button">
+          <Link to={`/recipe/${recipeToDisplay.id}`}>Edit</Link>
         </button>
-        <button onClick={handleFlipRecipeCard}>Full recipe</button>
+        <button
+          onClick={handleFlipRecipeCard}
+          className="recipe-card__navigation-container-button"
+        >
+          Full recipe
+        </button>
       </div>
-      <h4>{recipeToDisplay.title}</h4>
-      <h5>By {recipeToDisplay.author}</h5>
+      <h3>
+        {recipeToDisplay.title} - {recipeToDisplay.author}
+      </h3>
       <img src={recipeToDisplay.image_url} className="recipe-card__image" />
       <div className="recipe-card__ratings-container">
-        <div className="recipe-card__button-container">
-          <div className="recipe-card__voting-block">
-            <p>Upvotes: {recipeToDisplay.upvotes}</p>
-            <button onClick={handleUpvote}>Upvote</button>
-          </div>
-          <div className="recipe-card__voting-block">
-            <p>Downvotes: {recipeToDisplay.downvotes}</p>
-            <button onClick={handleDownvote}>Downvote</button>
-          </div>
-        </div>
+        <button
+          onClick={handleUpvote}
+          className="recipe-card__ratings-container-button"
+        >
+          <p>▲</p>
+          <p>{recipeToDisplay.upvotes}</p>
+        </button>
+        <button
+          onClick={handleDownvote}
+          className="recipe-card__ratings-container-button"
+        >
+          <p>▼</p>
+          <p>{recipeToDisplay.downvotes}</p>
+        </button>
       </div>
     </div>
   ) : (

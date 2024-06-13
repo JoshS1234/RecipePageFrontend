@@ -47,7 +47,7 @@ export function App() {
 
   return (
     <HashRouter>
-      <div>
+      <div className="app">
         {isLoading ? (
           <p>Loading...</p>
         ) : (
@@ -55,8 +55,23 @@ export function App() {
             <Header />
             <NavBar handleDatabaseUpdate={handleDatabaseUpdate} />
             <Routes>
-              <Route path="/" element={<BrowseRecipes recipes={recipes} />} />
-              <Route path="/recipe/:id" element={<SpecificRecipePage />} />
+              <Route
+                path="/"
+                element={
+                  <BrowseRecipes
+                    recipes={recipes}
+                    handleDatabaseUpdate={handleDatabaseUpdate}
+                  />
+                }
+              />
+              <Route
+                path="/recipe/:id"
+                element={
+                  <SpecificRecipePage
+                    handleDatabaseUpdate={handleDatabaseUpdate}
+                  />
+                }
+              />
               <Route
                 path="/add-recipe"
                 element={

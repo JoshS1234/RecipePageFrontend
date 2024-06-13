@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Ingredient, Recipe } from "../types/Recipes";
+import "./SpecificRecipePage.scss";
 
-const SpecificRecipePage = () => {
+type SpecificRecipePageProps = {
+  handleDatabaseUpdate: () => void;
+};
+
+const SpecificRecipePage = ({
+  handleDatabaseUpdate,
+}: SpecificRecipePageProps) => {
   const { id } = useParams();
 
   const [recipe, setRecipe] = useState<Recipe>();
@@ -121,6 +128,16 @@ const SpecificRecipePage = () => {
     }
   };
 
+  const handleDelete = () => {
+    fetch(`http://localhost:8080/recipes/${id}`, { method: "DELETE" }).then(
+      (data) => {
+        alert("recipe has been deleted");
+        console.log(data);
+        handleDatabaseUpdate();
+      }
+    );
+  };
+
   const handleSubmit = (e: SubmitEvent) => {
     e.preventDefault();
     let hasError = false;
@@ -197,8 +214,9 @@ const SpecificRecipePage = () => {
 
   return (
     <div className="add-recipe-page">
-      <h1>Add recipe</h1>
+      <h1>Edit recipe</h1>
       <form className="add-recipe-page__form" onSubmit={handleSubmit}>
+        <h3>Introduction</h3>
         <div className="add-recipe-page__simple-input">
           <label>Recipe name</label>
           <input type="text" onChange={updateTitle} value={recipeTitle}></input>
@@ -222,70 +240,85 @@ const SpecificRecipePage = () => {
           ></input>
         </div>
 
+        <h3>Ingredients</h3>
         {ingredients.map((ingredient, index) => {
           return (
             <div className="add-recipe-page__ingredient-container">
-              <label>Ingredient {index + 1}</label>
-              <input
-                type="text"
-                onChange={handleRenameIngredients}
-                id={`ing-textbox-${index}`}
-                value={ingredient.name}
-              ></input>
+              <div className="add-recipe-page__ing-input">
+                <label>Ingredient {index + 1}</label>
+                <input
+                  type="text"
+                  onChange={handleRenameIngredients}
+                  id={`ing-textbox-${index}`}
+                  value={ingredient.name}
+                ></input>
+              </div>
 
-              <label>Amount</label>
-              <input
-                type="text"
-                onChange={handleChangeIngredientAmount}
-                id={`ing-amount-textbox-${index}`}
-                value={ingredient.amount}
-              ></input>
+              <div className="add-recipe-page__ing-input">
+                <label>Amount</label>
+                <input
+                  type="text"
+                  onChange={handleChangeIngredientAmount}
+                  id={`ing-amount-textbox-${index}`}
+                  value={ingredient.amount}
+                ></input>
+              </div>
 
-              <button onClick={handleAddIngredients} type="button">
-                Add ingredients
-              </button>
               <button
                 onClick={handleRemoveIngredients}
                 type="button"
                 id={`remove-ing-button-${index}`}
               >
-                remove
+                🗑
               </button>
             </div>
           );
         })}
+        <button onClick={handleAddIngredients} type="button">
+          Add ingredients
+        </button>
 
+        <h3>Recipe</h3>
         {recipeSteps.map((recipeStep, index) => {
           return (
-            <div className="add-recipe-page__recipe-step-container">
-              <label>Recipe step {index + 1}</label>
-              <input
-                type="text"
-                onChange={handleChangeRecipeStep}
-                id={`rec-textbox-${index}`}
-                value={recipeStep}
-              ></input>
-
-              <div>
-                <button onClick={handleAddRecipeSteps} type="button">
-                  Add recipe steps
-                </button>
-                <button
-                  onClick={handleRemoveRecipeSteps}
-                  type="button"
-                  id={`remove-rec-button-${index}`}
-                >
-                  remove
-                </button>
+            <div className="add-recipe-page__recipe-container">
+              <div className="add-recipe-page__recipe-input">
+                <label>Recipe step {index + 1}</label>
+                <input
+                  type="text"
+                  onChange={handleChangeRecipeStep}
+                  id={`rec-textbox-${index}`}
+                  value={recipeStep}
+                ></input>
               </div>
+
+              <button
+                onClick={handleRemoveRecipeSteps}
+                type="button"
+                id={`remove-rec-button-${index}`}
+              >
+                🗑
+              </button>
             </div>
           );
         })}
+        <button onClick={handleAddRecipeSteps} type="button">
+          Add recipe steps
+        </button>
 
         {/* {hasError ? <p>You need to fill out all inputs</p> : <></>} */}
         {hasCompletedForm ? <p>Recipe has been updated</p> : <></>}
 
-        <button type="submit">Submit</button>
+        <div className="form-end-button-container">
+          <button type="button" onClick={handleDelete}>
+            <Link to="/">Delete 🗑</Link>
+          </button>
+
+          <button type="button">
+            <Link to="/">Cancel ✗</Link>
+          </button>
+          <button type="submit">Update ✔</button>
+        </div>
       </form>
     </div>
   );
