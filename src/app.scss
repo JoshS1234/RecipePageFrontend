@@ -1,4 +1,6 @@
+@use "./assets/variables" as *;
+
 .app {
   width: 100vw;
-  background-color: red;
+  background-color: $light-orange;
 }

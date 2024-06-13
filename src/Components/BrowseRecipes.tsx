@@ -1,5 +1,6 @@
 import RecipeCardContainer from "./RecipeCardContainer";
 import { Recipe } from "../types/Recipes";
+import "./BrowseRecipes.scss";
 
 type RecipeCardContainerProps = {
   recipes: Recipe[];
@@ -8,7 +9,6 @@ type RecipeCardContainerProps = {
 const BrowseRecipes = ({ recipes }: RecipeCardContainerProps) => {
   return (
     <div className="browse-recipes-page">
-      <h1>Recipe Card Container</h1>
       <h2>Add filtering here</h2>
       <RecipeCardContainer recipes={recipes} />
     </div>
